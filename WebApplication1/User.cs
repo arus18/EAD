@@ -7,6 +7,8 @@ namespace WebApplication1
 
         public string Password { get; set; }
 
+        public string NIC { get; set; }
+
         public User(string userName, string password)
         {
             UserName = userName;

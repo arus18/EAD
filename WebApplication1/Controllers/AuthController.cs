@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
@@ -12,20 +13,25 @@ namespace WebApplication1.Controllers
     public class AuthController : ControllerBase
     {
         IConfiguration configuration;
-        public AuthController(IConfiguration configuration)
+        private readonly UserService _userService;
+        public AuthController(IConfiguration configuration,UserService userService)
         {
             this.configuration = configuration;
+            this._userService = userService;
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Auth([FromBody] User user)
+        public async Task<IActionResult> Auth([FromBody] User user)
         {
             IActionResult response = Unauthorized();
 
             if (user != null)
             {
-                if (user.UserName.Equals("test@email.com") && user.Password.Equals("a"))
+                // Retrieve the user by NIC from the UserService.
+                RegistrationUser dbUser = await _userService.GetUserByNicAsync(user.NIC);
+
+                if (dbUser != null && user.Password.Equals(dbUser.Password))
                 {
                     var issuer = configuration["Jwt:Issuer"];
                     var audience = configuration["Jwt:Audience"];
@@ -37,8 +43,10 @@ namespace WebApplication1.Controllers
 
                     var subject = new ClaimsIdentity(new[]
                     {
-                        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                        new Claim(JwtRegisteredClaimNames.Email, user.UserName),
+                        new Claim(JwtRegisteredClaimNames.Sub, dbUser.UserName),
+                        new Claim(JwtRegisteredClaimNames.Email, "email"),
+                        new Claim(JwtRegisteredClaimNames.NameId, dbUser.Id)
+                        // You can add other claims as needed
                     });
 
                     var expires = DateTime.UtcNow.AddMinutes(10);
@@ -62,5 +70,6 @@ namespace WebApplication1.Controllers
 
             return response;
         }
+
     }
 }
