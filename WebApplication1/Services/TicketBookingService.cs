@@ -41,6 +41,7 @@ public class TicketBookingService
         }
 
         // Validation: Check if the maximum number of reservations (4) per reference ID is not exceeded.
+        //get number of reservations by userid from,to,time
         int maxReservationsPerReferenceId = 4;
         long existingReservations = await GetReservationsCountByReferenceId(reservation.ReferenceId);
         if (existingReservations >= maxReservationsPerReferenceId)
