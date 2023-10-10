@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebApplication1.Models;
-using WebApplication1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +37,6 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
-builder.Services.AddSingleton<MongoDBService>();
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<TicketBookingService>();
 var app = builder.Build();

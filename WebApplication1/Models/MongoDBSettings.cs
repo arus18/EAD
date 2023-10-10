@@ -9,5 +9,7 @@ public class MongoDBSettings {
     public string UserCollectionName { get; set; } = null!; 
     
     public string ReservationCollectionName { get; set; } = null!;
+    
+    public string ScheduleCollectionName { get; set; } = null!;
 
 }

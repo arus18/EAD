@@ -7,7 +7,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using WebApplication1.Models;
-using WebApplication1.Services;
 using System.Threading.Tasks;
 
 namespace WebApplication1.Controllers

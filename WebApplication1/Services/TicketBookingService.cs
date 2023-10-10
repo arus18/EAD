@@ -1,13 +1,7 @@
 using WebApplication1.Models;
-
-using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using WebApplication1.Models; // Assuming your TicketReservation model is in this namespace
 
 public class TicketBookingService
 {
@@ -43,7 +37,7 @@ public class TicketBookingService
         // Validation: Check if the maximum number of reservations (4) per reference ID is not exceeded.
         //get number of reservations by userid from,to,time
         int maxReservationsPerReferenceId = 4;
-        long existingReservations = await GetReservationsCountByReferenceId(reservation.ReferenceId);
+        long existingReservations = await GetReservationsCountByIdFromToTime(reservation.ReferenceId,reservation.FromDestination,reservation.ToDestination,reservation.ReservationDate);
         if (existingReservations >= maxReservationsPerReferenceId)
         {
             throw new ArgumentException($"Maximum {maxReservationsPerReferenceId} reservations per reference ID is allowed.");
@@ -80,11 +74,19 @@ public class TicketBookingService
         await _reservationCollection.DeleteOneAsync(filter);
     }
     
-    public async Task<long> GetReservationsCountByReferenceId(string referenceId)
+    public async Task<long> GetReservationsCountByIdFromToTime(string id, string fromDestination, string toDestination, DateTime date)
     {
-        var filter = Builders<TicketReservation>.Filter.Eq(reservation => reservation.ReferenceId, referenceId);
+        var filter = Builders<TicketReservation>.Filter.And(
+            Builders<TicketReservation>.Filter.Eq(reservation => reservation.Id, id),
+            Builders<TicketReservation>.Filter.Eq(reservation => reservation.FromDestination, fromDestination),
+            Builders<TicketReservation>.Filter.Eq(reservation => reservation.ToDestination, toDestination),
+            Builders<TicketReservation>.Filter.Eq(reservation => reservation.ReservationDate, date)
+        );
+
         return await _reservationCollection.Find(filter).CountDocumentsAsync();
     }
+
+
     
     public async Task<List<TicketReservation>> GetReservationsByUserIdAsync(string userId)
     {
