@@ -1,4 +1,5 @@
 //Ticket Reservation Controller
+// This controller handles ticket reservation and related operations.
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,7 @@ namespace WebApplication1.Controllers
         private readonly TicketBookingService _reservationService;
         private readonly ILogger<TicketReservationController> _logger;
 
+        // Constructor for TicketReservationController
         public TicketReservationController(IConfiguration configuration, TicketBookingService reservationService,
             ILogger<TicketReservationController> logger)
         {
@@ -30,6 +32,7 @@ namespace WebApplication1.Controllers
             _logger = logger;
         }
 
+        // Get all ticket reservations
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -45,6 +48,7 @@ namespace WebApplication1.Controllers
             }
         }
 
+        // Get ticket reservation by ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
@@ -64,7 +68,8 @@ namespace WebApplication1.Controllers
                 return StatusCode(500, "Internal server error.");
             }
         }
-        
+
+        // Create a new ticket reservation
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] TicketReservation reservation)
@@ -105,7 +110,7 @@ namespace WebApplication1.Controllers
 
 
 
-
+        // Update an existing ticket reservation
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, [FromBody] TicketReservation reservation)
         {
@@ -129,6 +134,7 @@ namespace WebApplication1.Controllers
             }
         }
 
+        // Delete a ticket reservation by ID
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
@@ -147,6 +153,7 @@ namespace WebApplication1.Controllers
             }
         }
 
+        // Get reservations for a specific user
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetReservationsByUserId(string userId)
         {
