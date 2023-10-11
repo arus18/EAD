@@ -1,4 +1,5 @@
 //Authentication Controller
+// This controller handles user authentication.
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,12 +17,15 @@ namespace WebApplication1.Controllers
     {
         IConfiguration configuration;
         private readonly UserService _userService;
+
+        // Constructor for AuthController
         public AuthController(IConfiguration configuration,UserService userService)
         {
             this.configuration = configuration;
             this._userService = userService;
         }
 
+        // Authenticate user
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Auth([FromBody] User user)
