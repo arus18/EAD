@@ -1,4 +1,5 @@
 //User Service
+// This service manages user-related operations, including user registration and activation.
 
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -18,27 +19,33 @@ public class UserService
         var uniqueIndex = new CreateIndexModel<RegistrationUser>(keys, new CreateIndexOptions { Unique = true });
         _userCollection.Indexes.CreateOne(uniqueIndex);
     }
+
+    // Get all registration users
     public async Task<List<RegistrationUser>> GetAllAsync()
     {
         return await _userCollection.Find(new BsonDocument()).ToListAsync();
     }
 
+    // Get a registration user by ID
     public async Task<RegistrationUser> GetByIdAsync(string id)
     {
         return await _userCollection.Find(user => user.Id == id).FirstOrDefaultAsync();
     }
 
+    // Create a new registration user
     public async Task<RegistrationUser> CreateAsync(RegistrationUser user)
     {
         await _userCollection.InsertOneAsync(user);
         return user;
     }
 
+    // Update an existing registration user
     public async Task UpdateAsync(string id, RegistrationUser user)
     {
         await _userCollection.ReplaceOneAsync(u => u.Id == id, user);
     }
 
+    // Delete a registration user by ID
     public async Task DeleteAsync(string id)
     {
         await _userCollection.DeleteOneAsync(user => user.Id == id);
@@ -51,7 +58,8 @@ public class UserService
         var update = Builders<RegistrationUser>.Update.Set(u => u.IsActivated, isActivated);
         await _userCollection.UpdateOneAsync(filter, update);
     }
-    
+
+    // Get a user by NIC
     public async Task<RegistrationUser> GetUserByNicAsync(string nic)
     {
         var filter = Builders<RegistrationUser>.Filter.Eq(user => user.NIC, nic);

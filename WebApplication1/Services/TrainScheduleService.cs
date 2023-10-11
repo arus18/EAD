@@ -1,4 +1,5 @@
 //Train Schedule Service
+// This service manages train schedules and related operations.
 
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
@@ -18,24 +19,28 @@ public class TrainScheduleService
             _scheduleCollection = database.GetCollection<TrainSchedule>(mongoDBSettings.Value.ScheduleCollectionName);
         }
 
-        public async Task<List<TrainSchedule>> GetAllAsync()
+    // Get all train schedules
+    public async Task<List<TrainSchedule>> GetAllAsync()
         {
             return await _scheduleCollection.Find(new BsonDocument()).ToListAsync();
         }
 
-        public async Task<TrainSchedule> GetByIdAsync(string id)
+    // Get a train schedule by ID
+    public async Task<TrainSchedule> GetByIdAsync(string id)
         {
             var filter = Builders<TrainSchedule>.Filter.Eq(schedule => schedule.Id, id);
             return await _scheduleCollection.Find(filter).FirstOrDefaultAsync();
         }
 
-        public async Task<string> CreateAsync(TrainSchedule schedule)
+    // Create a new train schedule
+    public async Task<string> CreateAsync(TrainSchedule schedule)
         {
             await _scheduleCollection.InsertOneAsync(schedule);
             return schedule.Id;
         }
 
-        public async Task UpdateAsync(string id, TrainSchedule schedule)
+    // Update an existing train schedule
+    public async Task UpdateAsync(string id, TrainSchedule schedule)
         {
             var existingSchedule = await GetByIdAsync(id);
             if (existingSchedule == null)
@@ -52,7 +57,8 @@ public class TrainScheduleService
             await _scheduleCollection.ReplaceOneAsync(filter, existingSchedule);
         }
 
-        public async Task DeleteAsync(string id)
+    // Delete a train schedule by ID
+    public async Task DeleteAsync(string id)
         {
             var filter = Builders<TrainSchedule>.Filter.Eq(schedule => schedule.Id, id);
             await _scheduleCollection.DeleteOneAsync(filter);

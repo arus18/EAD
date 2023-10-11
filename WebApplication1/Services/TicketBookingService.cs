@@ -1,4 +1,5 @@
 //Ticket Booking Service
+// This service manages ticket reservations and related operations.
 
 using WebApplication1.Models;
 using Microsoft.Extensions.Options;
@@ -16,17 +17,20 @@ public class TicketBookingService
         _reservationCollection = database.GetCollection<TicketReservation>(mongoDBSettings.Value.ReservationCollectionName);
     }
 
+    // Get all ticket reservations
     public async Task<List<TicketReservation>> GetAsync()
     {
         return await _reservationCollection.Find(new BsonDocument()).ToListAsync();
     }
 
+    // Get a ticket reservation by ID
     public async Task<TicketReservation> GetByIdAsync(string id)
     {
         var filter = Builders<TicketReservation>.Filter.Eq(reservation => reservation.Id, id);
         return await _reservationCollection.Find(filter).FirstOrDefaultAsync();
     }
 
+    // Create a new ticket reservation
     public async Task<string> CreateAsync(TicketReservation reservation)
     {
         // Validation: Check if the reservation date is within 30 days from the booking date.
@@ -49,7 +53,7 @@ public class TicketBookingService
         return reservation.Id;
     }
 
-
+    // Update an existing ticket reservation
     public async Task UpdateAsync(string id, TicketReservation reservation)
     {
         var existingReservation = await GetByIdAsync(id);
@@ -69,13 +73,14 @@ public class TicketBookingService
         // ...
     }
 
-
+    // Delete a ticket reservation by ID
     public async Task DeleteAsync(string id)
     {
         var filter = Builders<TicketReservation>.Filter.Eq(reservation => reservation.Id, id);
         await _reservationCollection.DeleteOneAsync(filter);
     }
-    
+
+    // Get the count of reservations by ID, from destination, to destination, and date
     public async Task<long> GetReservationsCountByIdFromToTime(string id, string fromDestination, string toDestination, DateTime date)
     {
         var filter = Builders<TicketReservation>.Filter.And(
@@ -89,7 +94,7 @@ public class TicketBookingService
     }
 
 
-    
+    // Get reservations by user ID
     public async Task<List<TicketReservation>> GetReservationsByUserIdAsync(string userId)
     {
         var filter = Builders<TicketReservation>.Filter.Eq(reservation => reservation.UserId, userId);
