@@ -1,4 +1,5 @@
 //Train Schedule Controller
+// This controller manages train schedules.
 
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
@@ -11,11 +12,13 @@ public class TrainScheduleController : ControllerBase
 {
     private readonly TrainScheduleService _scheduleService;
 
+    // Constructor for TrainScheduleController
     public TrainScheduleController(TrainScheduleService scheduleService)
     {
         _scheduleService = scheduleService;
     }
 
+    // Get all train schedules
     [HttpGet]
     public async Task<ActionResult<List<TrainSchedule>>> GetAllTrainSchedules()
     {
@@ -23,6 +26,7 @@ public class TrainScheduleController : ControllerBase
         return Ok(schedules);
     }
 
+    // Get a train schedule by ID
     [HttpGet("{id:length(24)}", Name = "GetTrainSchedule")]
     public async Task<ActionResult<TrainSchedule>> GetTrainScheduleById(string id)
     {
@@ -34,6 +38,7 @@ public class TrainScheduleController : ControllerBase
         return Ok(schedule);
     }
 
+    // Create a new train schedule
     [HttpPost]
     public async Task<ActionResult<string>> CreateTrainSchedule(TrainSchedule schedule)
     {
@@ -48,6 +53,7 @@ public class TrainScheduleController : ControllerBase
         }
     }
 
+    // Update an existing train schedule by ID
     [HttpPut("{id:length(24)}")]
     public async Task<IActionResult> UpdateTrainSchedule(string id, TrainSchedule schedule)
     {
@@ -62,6 +68,7 @@ public class TrainScheduleController : ControllerBase
         }
     }
 
+    // Update an existing train schedule by ID
     [HttpDelete("{id:length(24)}")]
     public async Task<IActionResult> DeleteTrainSchedule(string id)
     {
