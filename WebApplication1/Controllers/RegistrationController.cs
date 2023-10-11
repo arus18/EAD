@@ -1,4 +1,5 @@
 //Registration Controller 
+// This controller handles user registration and user management
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -20,12 +21,14 @@ namespace WebApplication1.Controllers
         private readonly IConfiguration _configuration;
         private readonly UserService _userService;
 
+        // Constructor for RegistrationController
         public RegistrationController(IConfiguration configuration, UserService userService)
         {
             _configuration = configuration;
             _userService = userService;
         }
 
+        // Register a new user
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegistrationUser registrationUser)
@@ -155,6 +158,8 @@ namespace WebApplication1.Controllers
             await _userService.DeleteAsync(id);
             return NoContent();
         }
+
+        // Activate a user
         [HttpPost("activate/{id}")]
         [Authorize] // You can apply authorization as needed
         public async Task<IActionResult> ActivateUser(string id)
@@ -165,6 +170,7 @@ namespace WebApplication1.Controllers
             return Ok("User activated successfully.");
         }
 
+        // Deactivate a user
         [HttpPost("deactivate/{id}")]
         [Authorize] // You can apply authorization as needed
         public async Task<IActionResult> DeactivateUser(string id)
