@@ -43,7 +43,8 @@ public class TicketBookingService
         // Validation: Check if the maximum number of reservations (4) per reference ID is not exceeded.
         //get number of reservations by userid from,to,time
         int maxReservationsPerReferenceId = 4;
-        long existingReservations = await GetReservationsCountByIdFromToTime(reservation.ReferenceId,reservation.FromDestination,reservation.ToDestination,reservation.ReservationDate);
+        Console.WriteLine(reservation.UserId);
+        long existingReservations = await GetReservationsCountByIdFromToTime(reservation.UserId,reservation.FromDestination,reservation.ToDestination,reservation.ReservationDate);
         if (existingReservations >= maxReservationsPerReferenceId)
         {
             throw new ArgumentException($"Maximum {maxReservationsPerReferenceId} reservations per reference ID is allowed.");
@@ -84,7 +85,7 @@ public class TicketBookingService
     public async Task<long> GetReservationsCountByIdFromToTime(string id, string fromDestination, string toDestination, DateTime date)
     {
         var filter = Builders<TicketReservation>.Filter.And(
-            Builders<TicketReservation>.Filter.Eq(reservation => reservation.Id, id),
+            Builders<TicketReservation>.Filter.Eq(reservation => reservation.UserId, id),
             Builders<TicketReservation>.Filter.Eq(reservation => reservation.FromDestination, fromDestination),
             Builders<TicketReservation>.Filter.Eq(reservation => reservation.ToDestination, toDestination),
             Builders<TicketReservation>.Filter.Eq(reservation => reservation.ReservationDate, date)

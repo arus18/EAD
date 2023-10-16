@@ -85,7 +85,6 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest("User ID claim not found.");
             }
-
             reservation.UserId = userId; // Set the UserId in the reservation object.
 
             try

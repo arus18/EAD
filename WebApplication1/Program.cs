@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebApplication1.Models;
+using WebApplication1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<TicketBookingService>();
+builder.Services.AddSingleton<TrainScheduleService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

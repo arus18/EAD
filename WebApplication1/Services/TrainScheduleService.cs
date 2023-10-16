@@ -52,6 +52,7 @@ public class TrainScheduleService
             existingSchedule.TrainName = schedule.TrainName;
             existingSchedule.DepartureTime = schedule.DepartureTime;
             existingSchedule.Destination = schedule.Destination;
+            existingSchedule.From = schedule.From;
 
             var filter = Builders<TrainSchedule>.Filter.Eq(s => s.Id, id);
             await _scheduleCollection.ReplaceOneAsync(filter, existingSchedule);
