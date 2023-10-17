@@ -4,11 +4,24 @@ using System.Text;
 using WebApplication1.Models;
 using WebApplication1.Services;
 
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+        });
+});
 
 builder.Services.AddControllers();
+
 
 builder.Services.AddAuthentication(options =>
 {
@@ -41,6 +54,8 @@ builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("Mo
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<TicketBookingService>();
 builder.Services.AddSingleton<TrainScheduleService>();
+builder.Services.AddSingleton<TrainDetailService>();
+builder.Services.AddSingleton<StationService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -51,8 +66,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
 
 app.UseAuthentication();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 

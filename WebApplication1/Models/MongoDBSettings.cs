@@ -13,5 +13,9 @@ public class MongoDBSettings {
     public string ReservationCollectionName { get; set; } = null!;
     
     public string ScheduleCollectionName { get; set; } = null!;
+    
+    public string TrainDetailCollectionName { get; set; } = null!;
+    
+    public string StationCollectionName { get; set; } = null!;
 
 }
