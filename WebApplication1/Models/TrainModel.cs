@@ -1,27 +1,27 @@
-namespace WebApplication1.Models;
+namespace WebApplication1.Models; // Define the namespace for the model class.
 
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson; // Import the MongoDB.Bson namespace for working with BSON objects.
+using MongoDB.Bson.Serialization.Attributes; // Import the necessary attributes for BSON serialization.
 
 public class TrainDetail
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string? Id { get; set; }
+    [BsonId] // This attribute indicates that the property serves as the BSON document's ID field.
+    [BsonRepresentation(BsonType.ObjectId)] // This specifies the representation of the ID as an ObjectId.
+    public string? Id { get; set; } // Property to store the unique identifier for the train detail.
 
-    public string TrainNo { get; set; }
-    
-    public string TrainName { get; set; }
+    public string TrainNo { get; set; } // Property to store the train number.
 
-    public int FirstClassCapacity { get; set; }
+    public string TrainName { get; set; } // Property to store the name of the train.
 
-    public int SecondClassCapacity { get; set; }
+    public int FirstClassCapacity { get; set; } // Property to store the first-class capacity.
 
-    public int ThirdClassCapacity { get; set; }
+    public int SecondClassCapacity { get; set; } // Property to store the second-class capacity.
 
-    public string Type { get; set; }
+    public int ThirdClassCapacity { get; set; } // Property to store the third-class capacity.
 
-    public bool IsPublished { get; set; }
+    public string Type { get; set; } // Property to store the type of the train.
 
-    public bool IsActive { get; set; }
+    public bool IsPublished { get; set; } // Property to indicate if the train detail is published.
+
+    public bool IsActive { get; set; } // Property to indicate if the train is active.
 }
